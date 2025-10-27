@@ -1,0 +1,13 @@
+# Ambiente Virtual
+.venv/
+venv/
+
+# Cache do Python
+__pycache__/
+*.pyc
+
+# Configuração do IntelliJ
+.idea/
+
+# Arquivo de segredos
+.env
