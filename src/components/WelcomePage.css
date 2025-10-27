@@ -1,0 +1,47 @@
+/* Centraliza o card de boas-vindas */
+.welcome-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f2f5; /* Mesmo fundo da tela de login */
+}
+
+/* Card de boas-vindas */
+.welcome-card {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.welcome-card h2 {
+  color: #333;
+  margin-top: 0;
+}
+
+.welcome-card p {
+  color: #555;
+  font-size: 1.1rem;
+}
+
+/* Botão de Sair */
+.logout-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #dc3545; /* Cor vermelha para "sair" */
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 1rem;
+}
+
+.logout-button:hover {
+  background-color: #c82333; /* Vermelho mais escuro */
+}
