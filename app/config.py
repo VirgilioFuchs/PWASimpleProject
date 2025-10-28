@@ -9,3 +9,4 @@ class Config:
     DB_PASSWORD = os.getenv("DB_PASSWORD")
     DB_NAME = os.getenv("DB_NAME")
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+    API_KEY = os.getenv("API_KEY")

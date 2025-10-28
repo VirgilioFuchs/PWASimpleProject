@@ -2,11 +2,13 @@ import bcrypt
 import jwt
 import datetime
 import mysql.connector
-from flask import Blueprint, request, jsonify, current_app
+from flask import Blueprint, request, jsonify, current_app, g
 from ..db import get_db_collection
+from ..decorators import require_api_key, require_jwt_token
 
 auth_bp = Blueprint('auth', __name__)
 
+@require_api_key
 @auth_bp.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -43,6 +45,7 @@ def register():
         cursor.close()
         conn.close()
 
+@require_api_key
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -80,12 +83,44 @@ def login():
             {
                 'user_id': user['id'],
                 'username': user['nomeUsuario'],
-                'exp': datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=24)
+                'exp': datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=1)
             },
             jwt_secret,
             algorithm='HS256'
         )
 
+        print(token)
         return jsonify({"message": "Login bem-sucedido", "token" : token}), 200
     else:
         return jsonify({"error": "Credenciais inválidas"}), 401
+
+@auth_bp.route('/user', methods=['GET'])
+@require_api_key
+@require_jwt_token
+def get_profile():
+    user_id_from_token = g.user_id
+
+    conn = get_db_collection()
+    if conn is None:
+        return jsonify({"message": "Erro no servidor (banco de dados)"}), 500
+
+    cursor = conn.cursor(dictionary=True)
+
+    try:
+        cursor.execute(
+            "SELECT id, username, created_at FROM usuarios WHERE id = %s",
+            (user_id_from_token,)
+        )
+        user = cursor.fetchone()
+
+        if user:
+            return jsonify(user), 200
+        else:
+            return jsonify({"error": "Usuário não encontrado."}), 404
+
+    except mysql.connector.Error as err:
+        return jsonify({"error": f"Erro de banco de dados: {err}"}), 500
+
+    finally:
+        cursor.close()
+        conn.close()
