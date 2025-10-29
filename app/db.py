@@ -1,7 +1,7 @@
 import mysql.connector
 from flask import current_app
 
-def get_db_collection():
+def get_db_connection():
     try:
         conn = mysql.connector.connect(
             host = current_app.config['DB_HOST'],

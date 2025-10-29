@@ -3,7 +3,7 @@ import jwt
 import datetime
 import mysql.connector
 from flask import Blueprint, request, jsonify, current_app, g
-from ..db import get_db_collection
+from ..db import get_db_connection
 from ..decorators import require_api_key, require_jwt_token
 
 auth_bp = Blueprint('auth', __name__)
@@ -23,27 +23,35 @@ def register():
     hashed_password_bytes = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     hashed_password = hashed_password_bytes.decode('utf-8')
 
-    conn = get_db_collection()
-    if conn is None:
-        return jsonify({"error": "Erro ao conectar ao banco de dados"}), 500
-
-    cursor = conn.cursor()
+    conn = None
+    cursor = None
 
     try:
+        conn = get_db_connection()
+        if conn is None:
+            return jsonify({"error": "Erro no servidor (banco de dados)"}), 500
+
+        cursor = conn.cursor()
+        if cursor is None:
+            return jsonify({"error": "Usuário registrado com sucesso!"}), 201
+
         cursor.execute(
             "INSERT INTO usuarios (nomeUsuario, senhaUsuario) VALUES (%s, %s)",
             (username, hashed_password)
         )
         conn.commit()
         return jsonify({"message": "Usuário registrado com sucesso!"}), 201
+
     except mysql.connector.Error as err:
         if err.errno == 1062:
             return jsonify({"error": "Nome de usuário já existente"}), 409
         return jsonify({"error": f"Erro de banco de dados: {err}"}), 500
 
     finally:
-        cursor.close()
-        conn.close()
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
 
 @require_api_key
 @auth_bp.route('/login', methods=['POST'])
@@ -55,7 +63,7 @@ def login():
     if not username or not password:
         return jsonify({"error": "Usuário e senha são obrigatórios"}), 400
 
-    conn = get_db_collection()
+    conn = get_db_connection()
     if conn is None:
         return jsonify({"error": "Erro ao conectar ao banco de dados"}), 500
 
@@ -83,13 +91,12 @@ def login():
             {
                 'user_id': user['id'],
                 'username': user['nomeUsuario'],
+                'is_admin': user['is_admin'],
                 'exp': datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=1)
             },
             jwt_secret,
             algorithm='HS256'
         )
-
-        print(token)
         return jsonify({"message": "Login bem-sucedido", "token" : token}), 200
     else:
         return jsonify({"error": "Credenciais inválidas"}), 401
@@ -98,29 +105,7 @@ def login():
 @require_api_key
 @require_jwt_token
 def get_profile():
-    user_id_from_token = g.user_id
-
-    conn = get_db_collection()
-    if conn is None:
-        return jsonify({"message": "Erro no servidor (banco de dados)"}), 500
-
-    cursor = conn.cursor(dictionary=True)
-
-    try:
-        cursor.execute(
-            "SELECT id, username, created_at FROM usuarios WHERE id = %s",
-            (user_id_from_token,)
-        )
-        user = cursor.fetchone()
-
-        if user:
-            return jsonify(user), 200
-        else:
-            return jsonify({"error": "Usuário não encontrado."}), 404
-
-    except mysql.connector.Error as err:
-        return jsonify({"error": f"Erro de banco de dados: {err}"}), 500
-
-    finally:
-        cursor.close()
-        conn.close()
+    if g.user:
+        return jsonify(g.user), 200
+    else:
+        return jsonify({"error": "Usuário não encontrado."}), 404
