@@ -28,20 +28,40 @@
   font-size: 1.1rem;
 }
 
-/* Botão de Sair */
-.logout-button {
+/* Estilo base para os botões */
+.conversation-button, .logout-button {
+  width: 100%; /* Ocupa a largura total do card */
   padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 4px;
-  background-color: #dc3545; /* Cor vermelha para "sair" */
   color: white;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  margin-top: 1rem;
+  margin-top: 1rem; /* Espaçamento entre os botões */
+  box-sizing: border-box; /* Garante que o padding não aumente a largura */
+}
+
+/* Botão de Conversa (Azul) */
+.conversation-button {
+  background-color: #007bff; 
+}
+
+.conversation-button:hover {
+  background-color: #0056b3; 
+}
+
+/* Botão de Sair (Vermelho) */
+.logout-button {
+  background-color: #dc3545; 
 }
 
 .logout-button:hover {
-  background-color: #c82333; /* Vermelho mais escuro */
+  background-color: #c82333; 
+}
+
+/* Estilo para o card de erro */
+.error-card h2 {
+  color: #c62828;
 }

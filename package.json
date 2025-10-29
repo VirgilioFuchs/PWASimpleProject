@@ -6,6 +6,7 @@
     "cra-template-pwa": "2.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-router-dom": "^7.9.4",
     "react-scripts": "5.0.1"
   },
   "scripts": {
@@ -31,5 +32,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://localhost:5000"
 }

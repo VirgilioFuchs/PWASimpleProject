@@ -83,12 +83,37 @@
 }
 
 .login-error {
-  background-color: #ffebee; /* Fundo vermelho claro */
-  color: #c62828; /* Texto vermelho escuro */
-  border: 1px solid #c62828; /* Borda vermelha */
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #c62828;
   border-radius: 4px;
   padding: 0.75rem;
   text-align: center;
   font-size: 0.9rem;
   margin-bottom: 1rem;
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: #00aaff;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+.link-button:hover {
+  color: #0077cc;
+}
+
+.text {
+    color: white;
 }

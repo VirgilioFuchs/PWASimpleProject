@@ -1,0 +1,129 @@
+/* Estrutura principal do chat */
+.chat-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f2f5;
+    padding: 20px;
+}
+
+.chat-window {
+    width: 100%;
+    max-width: 800px;
+    height: 90vh;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    background-color: #007bff;
+    color: white;
+    padding: 1rem;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    text-align: center;
+}
+
+.chat-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+/* Corpo do chat com as mensagens */
+.chat-body {
+    flex-grow: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    background-color: #e5ddd5; /* Fundo parecido com o WhatsApp */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Balão de mensagem */
+.message-bubble {
+    max-width: 95%; /* Aumentado de 85% para 95% */
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+    margin-bottom: 0.8rem;
+    position: relative;
+}
+
+.message-bubble.received {
+    background-color: #ffffff;
+    align-self: flex-start;
+    border-top-left-radius: 0;
+}
+
+.message-bubble.sent {
+    background-color: #dcf8c6; /* Verde claro, estilo WhatsApp */
+    align-self: flex-end;
+    border-top-right-radius: 0;
+}
+
+.message-info {
+    margin-bottom: 0.3rem;
+}
+
+.username {
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #007bff;
+}
+
+.message-content p {
+    margin: 0;
+    word-wrap: break-word;
+}
+
+.message-timestamp {
+    font-size: 0.75rem;
+    color: #999;
+    text-align: right;
+    margin-top: 0.3rem;
+}
+
+/* Rodapé com o formulário de envio */
+.chat-footer {
+    padding: 1rem;
+    background-color: #f0f0f0;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.message-form {
+    display: flex;
+}
+
+.message-input {
+    flex-grow: 4;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    margin-right: 0.5rem;
+}
+
+.send-button {
+
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 20px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    flex-grow: 1;
+}
+
+.send-button:hover {
+    background-color: #0056b3;
+}
+
+.error-message {
+    color: red;
+    text-align: center;
+    padding: 1rem;
+}
